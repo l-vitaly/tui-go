@@ -21,14 +21,14 @@ func (r *RuneBuffer) Width() int {
 }
 
 // Set the buffer and the index at the end of the buffer.
-func (b *RuneBuffer) Set(buf []rune) {
-	b.SetWithIdx(len(buf), buf)
+func (r *RuneBuffer) Set(buf []rune) {
+	r.SetWithIdx(len(buf), buf)
 }
 
 // SetWithIdx set the the buffer with a given index.
-func (b *RuneBuffer) SetWithIdx(idx int, buf []rune) {
-	b.buf = buf
-	b.idx = idx
+func (r *RuneBuffer) SetWithIdx(idx int, buf []rune) {
+	r.buf = buf
+	r.idx = idx
 }
 
 // WriteRune appends a rune to the buffer.
@@ -83,8 +83,8 @@ func (r *RuneBuffer) CursorPos(width int) image.Point {
 	return image.Pt(stringWidth(sp[len(sp)-1]), len(sp))
 }
 
-func (b *RuneBuffer) String() string {
-	return string(b.buf)
+func (r *RuneBuffer) String() string {
+	return string(r.buf)
 }
 
 func (r *RuneBuffer) MoveBackward() {
@@ -138,15 +138,4 @@ func (r *RuneBuffer) Delete() {
 
 func (r *RuneBuffer) Kill() {
 	r.buf = r.buf[:r.idx]
-}
-
-func IsWordBreak(i rune) bool {
-	switch {
-	case i >= 'a' && i <= 'z':
-	case i >= 'A' && i <= 'Z':
-	case i >= '0' && i <= '9':
-	default:
-		return true
-	}
-	return false
 }

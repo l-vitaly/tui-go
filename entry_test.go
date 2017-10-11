@@ -330,9 +330,7 @@ func TestEntry_OnEvent(t *testing.T) {
 	painter := NewPainter(surface, NewTheme())
 	painter.Repaint(e)
 
-	var want string
-
-	want = `
+	want := `
 Lore
 `
 	if e.offset != 0 {
@@ -373,10 +371,10 @@ Lore
 	painter.Repaint(e)
 
 	want = `
-psum
+sum 
 `
-	if e.offset != 7 {
-		t.Errorf("offset = %d; want = %d", e.offset, 7)
+	if e.offset != 8 {
+		t.Errorf("offset = %d; want = %d", e.offset, 8)
 	}
 	if surface.String() != want {
 		t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), want)
@@ -413,13 +411,13 @@ func TestEntry_MoveToStartAndEnd(t *testing.T) {
 			repeatKeyEvent(e, KeyEvent{Key: KeyCtrlE}, 1)
 			painter.Repaint(e)
 
-			want := "\nipsum\n"
+			want := "\npsum \n"
 
 			if got := e.text.CursorPos(5); got.X != 11 {
 				t.Errorf("cursor position should be %d, but was %d", 11, got.X)
 			}
-			if e.offset != 6 {
-				t.Errorf("offset should be %d, but was %d", 6, e.offset)
+			if e.offset != 7 {
+				t.Errorf("offset should be %d, but was %d", 7, e.offset)
 			}
 			if surface.String() != want {
 				t.Errorf("surface should be:\n%s\nbut was:\n%s", want, surface.String())
@@ -470,10 +468,10 @@ func TestEntry_OnKeyBackspaceEvent(t *testing.T) {
 			repeatKeyEvent(e, KeyEvent{Key: KeyRight}, 6)
 			painter.Repaint(e)
 
-			want := "\n ipum\n"
+			want := "\nipum \n"
 
-			if e.offset != 5 {
-				t.Errorf("offset should be %d, but was %d", 5, e.offset)
+			if e.offset != 6 {
+				t.Errorf("offset should be %d, but was %d", 6, e.offset)
 			}
 			if surface.String() != want {
 				t.Errorf("surface should be:\n%s\nbut was:\n%s", want, surface.String())
@@ -483,10 +481,10 @@ func TestEntry_OnKeyBackspaceEvent(t *testing.T) {
 			repeatKeyEvent(e, KeyEvent{Key: KeyBackspace2}, 1)
 			painter.Repaint(e)
 
-			want := "\nm ipu\n"
+			want := "\n ipu \n"
 
-			if e.offset != 4 {
-				t.Errorf("offset should be %d, but was %d", 4, e.offset)
+			if e.offset != 5 {
+				t.Errorf("offset should be %d, but was %d", 5, e.offset)
 			}
 			if surface.String() != want {
 				t.Errorf("surface should be:\n%s\nbut was:\n%s", want, surface.String())

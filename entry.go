@@ -45,13 +45,6 @@ func (e *Entry) Draw(p *Painter) {
 	})
 }
 
-func min(x1, x2 int) int {
-	if x1 < x2 {
-		return x1
-	}
-	return x2
-}
-
 func (e *Entry) visibleText() string {
 	text := e.text.String()
 	if text == "" {
