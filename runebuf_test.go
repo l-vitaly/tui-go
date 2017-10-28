@@ -78,9 +78,9 @@ func TestCursorPos(t *testing.T) {
 		idx         int
 		out         image.Point
 	}{
-		{"Lorem ipsum dolor sit amet.", 12, 27, image.Pt(5, 3)},
-		{"Lorem ipsum dolor sit amet.", 16, 27, image.Pt(15, 2)},
-		{"Lorem ipsum dolor sit amet.", 27, 20, image.Pt(20, 1)},
+		{"Lorem ipsum dolor sit amet.", 12, 27, image.Pt(5, 2)},
+		{"Lorem ipsum dolor sit amet.", 16, 27, image.Pt(15, 1)},
+		{"Lorem ipsum dolor sit amet.", 27, 20, image.Pt(20, 0)},
 	} {
 		t.Run("", func(t *testing.T) {
 			var r RuneBuffer
@@ -110,5 +110,39 @@ func TestSplitByLines(t *testing.T) {
 		if !reflect.DeepEqual(tt.want, got) {
 			t.Fatalf("want = %#v; got = %#v", tt.want, got)
 		}
+	}
+}
+
+func TestCursorPosWithLineSplit(t *testing.T) {
+	for _, tt := range []struct {
+		text        string
+		screenWidth int
+		idx         int
+		wrap        bool
+		want        image.Point
+	}{
+		// Lorem ipsum
+		// dolor sit amet.
+		{"Lorem ipsum dolor sit amet.", 12, 11, true, image.Pt(11, 0)},
+		{"Lorem ipsum dolor sit amet.", 12, 12, true, image.Pt(0, 1)},
+		{"Lorem ipsum dolor sit amet.", 12, 13, true, image.Pt(1, 1)},
+
+		// Lorem ipsum dolor
+		// sit amet.
+		{"Lorem ipsum dolor sit amet.", 19, 17, true, image.Pt(17, 0)},
+		{"Lorem ipsum dolor sit amet.", 19, 18, true, image.Pt(0, 1)},
+		{"Lorem ipsum dolor sit amet.", 19, 19, true, image.Pt(1, 1)},
+		{"Lorem ipsum dolor sit amet.", 19, 20, true, image.Pt(2, 1)},
+		{"Lorem ipsum dolor sit amet.", 19, 21, true, image.Pt(3, 1)},
+	} {
+		t.Run("", func(t *testing.T) {
+			var r RuneBuffer
+			r.wordwrap = tt.wrap
+			r.SetWithIdx(tt.idx, []rune(tt.text))
+
+			if got := r.CursorPos(tt.screenWidth); tt.want != got {
+				t.Fatalf("want = %s; got = %s", tt.want, got)
+			}
+		})
 	}
 }

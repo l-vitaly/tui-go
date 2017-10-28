@@ -45,19 +45,6 @@ func (e *Entry) Draw(p *Painter) {
 	})
 }
 
-func (e *Entry) visibleText() string {
-	text := e.text.String()
-	if text == "" {
-		return ""
-	}
-	windowStart := e.offset
-	windowEnd := e.Size().X + windowStart
-	if windowEnd > len(text) {
-		windowEnd = len(text)
-	}
-	return text[windowStart:windowEnd]
-}
-
 // SizeHint returns the recommended size hint for the entry.
 func (e *Entry) SizeHint() image.Point {
 	return image.Point{10, 1}
@@ -77,7 +64,7 @@ func (e *Entry) OnKeyEvent(ev KeyEvent) {
 			}
 		case KeyBackspace2:
 			e.text.Backspace()
-			if e.offset > 0 && !e.isTextLeft() {
+			if e.offset > 0 && !e.isTextRemaining() {
 				e.offset--
 			}
 			if e.onTextChange != nil {
@@ -127,10 +114,6 @@ func (e *Entry) OnKeyEvent(ev KeyEvent) {
 	}
 }
 
-func (e *Entry) isTextLeft() bool {
-	return e.text.Width()-e.offset > e.Size().X
-}
-
 // OnChanged sets a function to be run whenever the content of the entry has
 // been changed.
 func (e *Entry) OnChanged(fn func(entry *Entry)) {
@@ -151,4 +134,21 @@ func (e *Entry) SetText(text string) {
 // Text returns the text content of the entry.
 func (e *Entry) Text() string {
 	return e.text.String()
+}
+
+func (e *Entry) visibleText() string {
+	text := e.text.String()
+	if text == "" {
+		return ""
+	}
+	windowStart := e.offset
+	windowEnd := e.Size().X + windowStart
+	if windowEnd > len(text) {
+		windowEnd = len(text)
+	}
+	return text[windowStart:windowEnd]
+}
+
+func (e *Entry) isTextRemaining() bool {
+	return e.text.Width()-e.offset > e.Size().X
 }

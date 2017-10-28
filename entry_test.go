@@ -519,7 +519,7 @@ func TestEntry_OnKeyBackspaceEvent(t *testing.T) {
 	})
 }
 
-func TestIsTextLeft(t *testing.T) {
+func TestIsTextRemaining(t *testing.T) {
 	for _, tt := range []struct {
 		text   string
 		offset int
@@ -539,8 +539,8 @@ func TestIsTextLeft(t *testing.T) {
 
 			e.offset = tt.offset
 
-			if e.isTextLeft() != tt.want {
-				t.Fatalf("want = %v; got = %v", tt.want, e.isTextLeft())
+			if e.isTextRemaining() != tt.want {
+				t.Fatalf("want = %v; got = %v", tt.want, e.isTextRemaining())
 			}
 		})
 	}

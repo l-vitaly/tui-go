@@ -83,7 +83,7 @@ func (r *RuneBuffer) CursorPos(width int) image.Point {
 
 	sp := getSplitByLine(r.buf[:r.idx], width, r.wordwrap)
 
-	return image.Pt(stringWidth(sp[len(sp)-1]), len(sp))
+	return image.Pt(stringWidth(sp[len(sp)-1]), len(sp)-1)
 }
 
 func (r *RuneBuffer) String() string {
@@ -148,4 +148,8 @@ func (r *RuneBuffer) Delete() {
 // Kill deletes all runes from the cursor until the end of the line.
 func (r *RuneBuffer) Kill() {
 	r.buf = r.buf[:r.idx]
+}
+
+func (r *RuneBuffer) heightForWidth(w int) int {
+	return len(r.SplitByLine(w))
 }
